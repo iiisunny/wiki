@@ -11,7 +11,7 @@
 
 - 后端业务：Java 1.8、 Spring Boot 2.4.3
 - 后端存储：MySQL 8.0、MyBatis 2.1.3
-- 前端系统：Vue CLi 4.5.9、Vue 3.0.0、ant-design-vue 2.0.0-rc.3
+- 前端系统：Vue CLi 4.5.9、Vue 3.0.0、ant-design-vue 2.0.0-rc.3、axios 0.21.0
 
 ## 💻前端页面
 

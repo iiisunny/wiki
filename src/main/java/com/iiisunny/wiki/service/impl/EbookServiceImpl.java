@@ -9,6 +9,7 @@ import com.iiisunny.wiki.service.EbookService;
 import com.iiisunny.wiki.util.CopyUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.ObjectUtils;
 
 import java.util.List;
 
@@ -28,7 +29,9 @@ public class EbookServiceImpl implements EbookService {
     public List<EbookModelResp> getList(EbookModelReq req) {
         EbookModelExample ebookModelExample = new EbookModelExample();
         EbookModelExample.Criteria criteria = ebookModelExample.createCriteria();
-        criteria.andNameLike("%" + req.getName() + "%");
+        if (!ObjectUtils.isEmpty(req.getName())){
+            criteria.andNameLike("%" + req.getName() + "%");
+        }
         List<EbookModel> ebookModelList = ebookModelMapper.selectByExample(ebookModelExample);
 
 //        List<EbookModelResp> ebookModelRespList = new ArrayList<>();
