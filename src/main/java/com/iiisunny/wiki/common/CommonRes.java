@@ -5,41 +5,44 @@ package com.iiisunny.wiki.common;
  * @author: iiisunny
  * @create: 2021-03-07 21:17
  **/
-public class CommonRes {
+public class CommonRes<T> {
 
-    // 表明请求的返回处理结果，"success"或"fail"
-    private String status;
+    /**
+     * 业务上的成功或失败
+     */
+    private boolean success = true;
 
-    // 若status=success时，表明对应的返回的接送类的数据
-    // 若status=fail时，则data内将使用通用的错误码对应的格式
-    private Object data;
+    /**
+     * 返回信息
+     */
+    private String message;
 
-    // 定义一个通用的创建返回对象的方法
-    public static CommonRes create(Object result){
-        return CommonRes.create(result,"success");
+    /**
+     * 返回泛型数据，自定义类型
+     */
+    private T content;
+
+    public boolean getSuccess() {
+        return success;
     }
 
-    public static CommonRes create(Object result, String status){
-        CommonRes commonRes = new CommonRes();
-        commonRes.setStatus(status);
-        commonRes.setData(result);
-        return commonRes;
+    public void setSuccess(boolean success) {
+        this.success = success;
     }
 
-
-    public String getStatus() {
-        return status;
+    public String getMessage() {
+        return message;
     }
 
-    public void setStatus(String status) {
-        this.status = status;
+    public void setMessage(String message) {
+        this.message = message;
     }
 
-    public Object getData() {
-        return data;
+    public T getContent() {
+        return content;
     }
 
-    public void setData(Object data) {
-        this.data = data;
+    public void setContent(T content) {
+        this.content = content;
     }
 }
