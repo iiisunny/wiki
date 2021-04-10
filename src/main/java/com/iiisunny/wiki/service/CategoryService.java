@@ -5,6 +5,8 @@ import com.iiisunny.wiki.req.CategorySaveReq;
 import com.iiisunny.wiki.resp.CategoryQueryResp;
 import com.iiisunny.wiki.resp.PageResp;
 
+import java.util.List;
+
 /**
  * @description: 电子书service类
  * @author: iiisunny
@@ -14,7 +16,10 @@ import com.iiisunny.wiki.resp.PageResp;
 public interface CategoryService {
 
     // 查询电子书列表
-    PageResp<CategoryQueryResp> getList(CategoryQuerylReq req);
+    PageResp<CategoryQueryResp> list(CategoryQuerylReq req);
+
+    // 查询电子书列表
+    List<CategoryQueryResp> all();
 
     // 编辑电子书详情按钮
     void save(CategorySaveReq req);

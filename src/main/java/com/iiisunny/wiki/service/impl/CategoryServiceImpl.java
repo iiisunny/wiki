@@ -38,14 +38,15 @@ public class CategoryServiceImpl implements CategoryService {
     private SnowFlake snowFlake;
 
     @Override
-    public PageResp<CategoryQueryResp> getList(CategoryQuerylReq req) {
+    public PageResp<CategoryQueryResp> list(CategoryQuerylReq req) {
 
-        CategoryModelExample CategoryModelExample = new CategoryModelExample();
-        CategoryModelExample.Criteria criteria = CategoryModelExample.createCriteria();
+        CategoryModelExample categoryModelExample = new CategoryModelExample();
+        categoryModelExample.setOrderByClause("sort asc");
+        CategoryModelExample.Criteria criteria = categoryModelExample.createCriteria();
 
         // 分页
         PageHelper.startPage(req.getPage(), req.getSize());
-        List<CategoryModel> categoryModelList = categoryModelMapper.selectByExample(CategoryModelExample);
+        List<CategoryModel> categoryModelList = categoryModelMapper.selectByExample(categoryModelExample);
 
         PageInfo<CategoryModel> pageInfo = new PageInfo<>(categoryModelList);
         LOG.info("总页数: {}", pageInfo.getTotal());
@@ -57,6 +58,17 @@ public class CategoryServiceImpl implements CategoryService {
         pageResp.setList(list);
 
         return pageResp;
+    }
+
+    @Override
+    public List<CategoryQueryResp> all() {
+
+        CategoryModelExample categoryModelExample = new CategoryModelExample();
+        categoryModelExample.setOrderByClause("sort asc");
+        List<CategoryModel> categoryModelList = categoryModelMapper.selectByExample(categoryModelExample);
+        List<CategoryQueryResp> list = CopyUtil.copyList(categoryModelList, CategoryQueryResp.class);
+
+        return list;
     }
 
     @Override
