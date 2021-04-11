@@ -15,18 +15,22 @@ import java.util.List;
 
 public interface DocService {
 
-    // 查询电子书列表
+    // 查询文档列表
     PageResp<DocQueryResp> list(DocQuerylReq req);
 
-    // 查询电子书列表
-    List<DocQueryResp> all();
+    // 查询文档列表
+    List<DocQueryResp> all(Long ebookId);
 
-    // 编辑电子书详情按钮
+    // 编辑文档详情按钮
     void save(DocSaveReq req);
 
-    // 删除电子书
+    // 删除文档
     void delete(Long id);
 
+    // 删除文档
     void delete(List<String> ids);
+
+    // 查询内容
+    String findContent(Long id);
 
 }

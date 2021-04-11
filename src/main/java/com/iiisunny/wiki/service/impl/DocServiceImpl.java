@@ -2,7 +2,9 @@ package com.iiisunny.wiki.service.impl;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.iiisunny.wiki.mapper.ContentModelMapper;
 import com.iiisunny.wiki.mapper.DocModelMapper;
+import com.iiisunny.wiki.model.ContentModel;
 import com.iiisunny.wiki.model.DocModel;
 import com.iiisunny.wiki.model.DocModelExample;
 import com.iiisunny.wiki.req.DocQuerylReq;
@@ -35,6 +37,9 @@ public class DocServiceImpl implements DocService {
     private DocModelMapper docModelMapper;
 
     @Autowired
+    private ContentModelMapper contentModelMapper;
+
+    @Autowired
     private SnowFlake snowFlake;
 
     @Override
@@ -61,9 +66,10 @@ public class DocServiceImpl implements DocService {
     }
 
     @Override
-    public List<DocQueryResp> all() {
+    public List<DocQueryResp> all(Long ebookId) {
 
         DocModelExample docModelExample = new DocModelExample();
+        docModelExample.createCriteria().andEbookIdEqualTo(ebookId);
         docModelExample.setOrderByClause("sort asc");
         List<DocModel> docModelList = docModelMapper.selectByExample(docModelExample);
         List<DocQueryResp> list = CopyUtil.copyList(docModelList, DocQueryResp.class);
@@ -76,13 +82,21 @@ public class DocServiceImpl implements DocService {
 
         // 将请求参数变为实体
         DocModel docModel = CopyUtil.copy(req, DocModel.class);
+        ContentModel contentModel = CopyUtil.copy(req, ContentModel.class);
         if (ObjectUtils.isEmpty(req.getId())){
             // 新增
             docModel.setId(snowFlake.nextId());
             docModelMapper.insert(docModel);
+
+            contentModel.setId(docModel.getId());
+            contentModelMapper.insert(contentModel);
         }else {
             // 更新
             docModelMapper.updateByPrimaryKey(docModel);
+            int count = contentModelMapper.updateByPrimaryKeyWithBLOBs(contentModel);
+            if (count == 0){
+                contentModelMapper.insert(contentModel);
+            }
         }
     }
 
@@ -97,5 +111,15 @@ public class DocServiceImpl implements DocService {
         DocModelExample.Criteria criteria = docModelExample.createCriteria();
         criteria.andIdIn(ids);
         docModelMapper.deleteByExample(docModelExample);
+    }
+
+    @Override
+    public String findContent(Long id) {
+        ContentModel contentModel = contentModelMapper.selectByPrimaryKey(id);
+        if (ObjectUtils.isEmpty(contentModel)){
+            return "";
+        }else {
+            return contentModel.getContent();
+        }
     }
 }

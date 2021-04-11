@@ -18,6 +18,9 @@ public class DocSaveReq {
     @NotNull(message = "【顺序】不能为空")
     private Integer sort;
 
+    @NotNull(message = "【内容】不能为空")
+    private String content;
+
     private Integer viewCount;
 
     private Integer voteCount;
@@ -60,6 +63,14 @@ public class DocSaveReq {
 
     public void setSort(Integer sort) {
         this.sort = sort;
+    }
+
+    public String getContent() {
+        return content;
+    }
+
+    public void setContent(String content) {
+        this.content = content;
     }
 
     public Integer getViewCount() {
