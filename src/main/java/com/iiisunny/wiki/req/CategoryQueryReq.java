@@ -1,6 +1,6 @@
 package com.iiisunny.wiki.req;
 
-public class CategoryQuerylReq extends PageReq{
+public class CategoryQueryReq extends PageReq{
 
     @Override
     public String toString() {

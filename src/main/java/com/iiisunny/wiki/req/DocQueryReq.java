@@ -1,6 +1,6 @@
 package com.iiisunny.wiki.req;
 
-public class DocQuerylReq extends PageReq{
+public class DocQueryReq extends PageReq{
 
     @Override
     public String toString() {

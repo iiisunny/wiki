@@ -5,7 +5,7 @@ import com.github.pagehelper.PageInfo;
 import com.iiisunny.wiki.mapper.CategoryModelMapper;
 import com.iiisunny.wiki.model.CategoryModel;
 import com.iiisunny.wiki.model.CategoryModelExample;
-import com.iiisunny.wiki.req.CategoryQuerylReq;
+import com.iiisunny.wiki.req.CategoryQueryReq;
 import com.iiisunny.wiki.req.CategorySaveReq;
 import com.iiisunny.wiki.resp.CategoryQueryResp;
 import com.iiisunny.wiki.resp.PageResp;
@@ -38,7 +38,7 @@ public class CategoryServiceImpl implements CategoryService {
     private SnowFlake snowFlake;
 
     @Override
-    public PageResp<CategoryQueryResp> list(CategoryQuerylReq req) {
+    public PageResp<CategoryQueryResp> list(CategoryQueryReq req) {
 
         CategoryModelExample categoryModelExample = new CategoryModelExample();
         categoryModelExample.setOrderByClause("sort asc");

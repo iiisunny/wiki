@@ -5,7 +5,7 @@ import com.github.pagehelper.PageInfo;
 import com.iiisunny.wiki.mapper.EbookModelMapper;
 import com.iiisunny.wiki.model.EbookModel;
 import com.iiisunny.wiki.model.EbookModelExample;
-import com.iiisunny.wiki.req.EbookQuerylReq;
+import com.iiisunny.wiki.req.EbookQueryReq;
 import com.iiisunny.wiki.req.EbookSaveReq;
 import com.iiisunny.wiki.resp.EbookQueryResp;
 import com.iiisunny.wiki.resp.PageResp;
@@ -38,7 +38,7 @@ public class EbookServiceImpl implements EbookService {
     private SnowFlake snowFlake;
 
     @Override
-    public PageResp<EbookQueryResp> getList(EbookQuerylReq req) {
+    public PageResp<EbookQueryResp> getList(EbookQueryReq req) {
 
         EbookModelExample ebookModelExample = new EbookModelExample();
         EbookModelExample.Criteria criteria = ebookModelExample.createCriteria();

@@ -1,6 +1,6 @@
 package com.iiisunny.wiki.service;
 
-import com.iiisunny.wiki.req.CategoryQuerylReq;
+import com.iiisunny.wiki.req.CategoryQueryReq;
 import com.iiisunny.wiki.req.CategorySaveReq;
 import com.iiisunny.wiki.resp.CategoryQueryResp;
 import com.iiisunny.wiki.resp.PageResp;
@@ -16,7 +16,7 @@ import java.util.List;
 public interface CategoryService {
 
     // 查询电子书列表
-    PageResp<CategoryQueryResp> list(CategoryQuerylReq req);
+    PageResp<CategoryQueryResp> list(CategoryQueryReq req);
 
     // 查询电子书列表
     List<CategoryQueryResp> all();

@@ -1,7 +1,7 @@
 package com.iiisunny.wiki.controller;
 
 import com.iiisunny.wiki.common.CommonRes;
-import com.iiisunny.wiki.req.CategoryQuerylReq;
+import com.iiisunny.wiki.req.CategoryQueryReq;
 import com.iiisunny.wiki.req.CategorySaveReq;
 import com.iiisunny.wiki.resp.CategoryQueryResp;
 import com.iiisunny.wiki.resp.PageResp;
@@ -27,7 +27,7 @@ public class CategoryController {
     private CategoryService categoryService;
 
     @RequestMapping(value = "/list", method = RequestMethod.GET)
-    public CommonRes list(@Valid CategoryQuerylReq req){
+    public CommonRes list(@Valid CategoryQueryReq req){
         CommonRes<PageResp<CategoryQueryResp>> resp = new CommonRes<>();
         PageResp<CategoryQueryResp> list = categoryService.list(req);
         resp.setContent(list);

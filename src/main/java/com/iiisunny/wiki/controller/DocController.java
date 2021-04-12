@@ -1,7 +1,7 @@
 package com.iiisunny.wiki.controller;
 
 import com.iiisunny.wiki.common.CommonRes;
-import com.iiisunny.wiki.req.DocQuerylReq;
+import com.iiisunny.wiki.req.DocQueryReq;
 import com.iiisunny.wiki.req.DocSaveReq;
 import com.iiisunny.wiki.resp.DocQueryResp;
 import com.iiisunny.wiki.resp.PageResp;
@@ -28,7 +28,7 @@ public class DocController {
     private DocService docService;
 
     @RequestMapping(value = "/list", method = RequestMethod.GET)
-    public CommonRes list(@Valid DocQuerylReq req){
+    public CommonRes list(@Valid DocQueryReq req){
         CommonRes<PageResp<DocQueryResp>> resp = new CommonRes<>();
         PageResp<DocQueryResp> list = docService.list(req);
         resp.setContent(list);

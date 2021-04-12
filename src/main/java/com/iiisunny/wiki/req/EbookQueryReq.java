@@ -1,6 +1,6 @@
 package com.iiisunny.wiki.req;
 
-public class EbookQuerylReq extends PageReq{
+public class EbookQueryReq extends PageReq{
 
     private Long id;
 

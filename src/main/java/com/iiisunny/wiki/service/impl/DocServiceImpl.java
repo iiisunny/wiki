@@ -7,7 +7,7 @@ import com.iiisunny.wiki.mapper.DocModelMapper;
 import com.iiisunny.wiki.model.ContentModel;
 import com.iiisunny.wiki.model.DocModel;
 import com.iiisunny.wiki.model.DocModelExample;
-import com.iiisunny.wiki.req.DocQuerylReq;
+import com.iiisunny.wiki.req.DocQueryReq;
 import com.iiisunny.wiki.req.DocSaveReq;
 import com.iiisunny.wiki.resp.DocQueryResp;
 import com.iiisunny.wiki.resp.PageResp;
@@ -43,7 +43,7 @@ public class DocServiceImpl implements DocService {
     private SnowFlake snowFlake;
 
     @Override
-    public PageResp<DocQueryResp> list(DocQuerylReq req) {
+    public PageResp<DocQueryResp> list(DocQueryReq req) {
 
         DocModelExample docModelExample = new DocModelExample();
         docModelExample.setOrderByClause("sort asc");

@@ -1,6 +1,6 @@
 package com.iiisunny.wiki.service;
 
-import com.iiisunny.wiki.req.DocQuerylReq;
+import com.iiisunny.wiki.req.DocQueryReq;
 import com.iiisunny.wiki.req.DocSaveReq;
 import com.iiisunny.wiki.resp.DocQueryResp;
 import com.iiisunny.wiki.resp.PageResp;
@@ -16,7 +16,7 @@ import java.util.List;
 public interface DocService {
 
     // 查询文档列表
-    PageResp<DocQueryResp> list(DocQuerylReq req);
+    PageResp<DocQueryResp> list(DocQueryReq req);
 
     // 查询文档列表
     List<DocQueryResp> all(Long ebookId);
