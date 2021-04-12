@@ -1,12 +1,14 @@
 package com.iiisunny.wiki.controller;
 
 import com.iiisunny.wiki.common.CommonRes;
-import com.iiisunny.wiki.req.UserQuerylReq;
+import com.iiisunny.wiki.req.UserQueryReq;
+import com.iiisunny.wiki.req.UserResetPasswordReq;
 import com.iiisunny.wiki.req.UserSaveReq;
 import com.iiisunny.wiki.resp.UserQueryResp;
 import com.iiisunny.wiki.resp.PageResp;
 import com.iiisunny.wiki.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.util.DigestUtils;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -26,7 +28,7 @@ public class UserController {
     private UserService userService;
 
     @RequestMapping(value = "/list", method = RequestMethod.GET)
-    public CommonRes list(@Valid UserQuerylReq req){
+    public CommonRes list(@Valid UserQueryReq req){
         CommonRes<PageResp<UserQueryResp>> resp = new CommonRes<>();
         PageResp<UserQueryResp> list = userService.getList(req);
         resp.setContent(list);
@@ -35,6 +37,7 @@ public class UserController {
 
     @RequestMapping(value = "/save", method = RequestMethod.POST)
     public CommonRes save(@Valid @RequestBody UserSaveReq req) {
+        req.setPassword(DigestUtils.md5DigestAsHex(req.getPassword().getBytes()));
         CommonRes resp = new CommonRes<>();
         userService.save(req);
         return resp;
@@ -44,6 +47,14 @@ public class UserController {
     public CommonRes delete(@PathVariable Long id) {
         CommonRes resp = new CommonRes<>();
         userService.delete(id);
+        return resp;
+    }
+
+    @RequestMapping(value = "/reset-password", method = RequestMethod.POST)
+    public CommonRes resetRassword(@Valid @RequestBody UserResetPasswordReq req) {
+        req.setPassword(DigestUtils.md5DigestAsHex(req.getPassword().getBytes()));
+        CommonRes resp = new CommonRes<>();
+        userService.resetPassword(req);
         return resp;
     }
 }

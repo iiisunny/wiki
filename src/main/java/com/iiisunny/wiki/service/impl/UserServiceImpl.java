@@ -2,10 +2,13 @@ package com.iiisunny.wiki.service.impl;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.iiisunny.wiki.exception.BusinessException;
+import com.iiisunny.wiki.exception.BusinessExceptionCode;
 import com.iiisunny.wiki.mapper.UserModelMapper;
 import com.iiisunny.wiki.model.UserModel;
 import com.iiisunny.wiki.model.UserModelExample;
 import com.iiisunny.wiki.req.UserQueryReq;
+import com.iiisunny.wiki.req.UserResetPasswordReq;
 import com.iiisunny.wiki.req.UserSaveReq;
 import com.iiisunny.wiki.resp.UserQueryResp;
 import com.iiisunny.wiki.resp.PageResp;
@@ -16,6 +19,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
 import org.springframework.util.ObjectUtils;
 
 import java.util.List;
@@ -68,17 +72,44 @@ public class UserServiceImpl implements UserService {
         // 将请求参数变为实体
         UserModel userModel = CopyUtil.copy(req, UserModel.class);
         if (ObjectUtils.isEmpty(req.getId())){
-            // 新增
-            userModel.setId(snowFlake.nextId());
-            userModelMapper.insert(userModel);
+            UserModel userDB = selectByLoginName(req.getLoginName());
+            if (ObjectUtils.isEmpty(userDB)){
+                // 新增
+                userModel.setId(snowFlake.nextId());
+                userModelMapper.insert(userModel);
+            }else {
+                throw new BusinessException(BusinessExceptionCode.USER_LOGIN_NAME_EXIST);
+            }
         }else {
             // 更新
-            userModelMapper.updateByPrimaryKey(userModel);
+            userModel.setLoginName(null);
+            userModel.setPassword(null);
+            userModelMapper.updateByPrimaryKeySelective(userModel);
         }
     }
 
     @Override
     public void delete(Long id) {
         userModelMapper.deleteByPrimaryKey(id);
+    }
+
+    @Override
+    public UserModel selectByLoginName(String loginName) {
+        UserModelExample userModelExample = new UserModelExample();
+        UserModelExample.Criteria criteria = userModelExample.createCriteria();
+        criteria.andLoginNameEqualTo(loginName);
+        List<UserModel> userModelList = userModelMapper.selectByExample(userModelExample);
+        if (CollectionUtils.isEmpty(userModelList)){
+            return null;
+        }else {
+            return userModelList.get(0);
+        }
+    }
+
+    @Override
+    public void resetPassword(UserResetPasswordReq req) {
+        // 将请求参数变为实体
+        UserModel userModel = CopyUtil.copy(req, UserModel.class);
+        userModelMapper.updateByPrimaryKeySelective(userModel);
     }
 }

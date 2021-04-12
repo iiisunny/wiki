@@ -1,6 +1,8 @@
 package com.iiisunny.wiki.service;
 
+import com.iiisunny.wiki.model.UserModel;
 import com.iiisunny.wiki.req.UserQueryReq;
+import com.iiisunny.wiki.req.UserResetPasswordReq;
 import com.iiisunny.wiki.req.UserSaveReq;
 import com.iiisunny.wiki.resp.UserQueryResp;
 import com.iiisunny.wiki.resp.PageResp;
@@ -13,13 +15,18 @@ import com.iiisunny.wiki.resp.PageResp;
 
 public interface UserService {
 
-    // 查询电子书列表
+    // 查询用户
     PageResp<UserQueryResp> getList(UserQueryReq req);
 
-    // 编辑电子书详情按钮
+    // 保存用户
     void save(UserSaveReq req);
 
-    // 删除电子书
+    // 修改密码
+    void resetPassword(UserResetPasswordReq req);
+
+    // 删除用户
     void delete(Long id);
+
+    UserModel selectByLoginName(String loginName);
 
 }
