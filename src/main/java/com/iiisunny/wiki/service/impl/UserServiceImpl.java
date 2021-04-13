@@ -7,9 +7,11 @@ import com.iiisunny.wiki.exception.BusinessExceptionCode;
 import com.iiisunny.wiki.mapper.UserModelMapper;
 import com.iiisunny.wiki.model.UserModel;
 import com.iiisunny.wiki.model.UserModelExample;
+import com.iiisunny.wiki.req.UserLoginReq;
 import com.iiisunny.wiki.req.UserQueryReq;
 import com.iiisunny.wiki.req.UserResetPasswordReq;
 import com.iiisunny.wiki.req.UserSaveReq;
+import com.iiisunny.wiki.resp.UserLoginResp;
 import com.iiisunny.wiki.resp.UserQueryResp;
 import com.iiisunny.wiki.resp.PageResp;
 import com.iiisunny.wiki.service.UserService;
@@ -111,5 +113,26 @@ public class UserServiceImpl implements UserService {
         // 将请求参数变为实体
         UserModel userModel = CopyUtil.copy(req, UserModel.class);
         userModelMapper.updateByPrimaryKeySelective(userModel);
+    }
+
+    @Override
+    public UserLoginResp login(UserLoginReq req) {
+        UserModel userDB = selectByLoginName(req.getLoginName());
+        if (ObjectUtils.isEmpty(userDB)){
+            // 用户名不存在
+            LOG.info("用户名不存在，{}", req.getLoginName());
+            throw new BusinessException(BusinessExceptionCode.LOGIN_USER_ERROR);
+        }else {
+            if (userDB.getPassword().equals(req.getPassword())){
+                // 登录成功
+                UserLoginResp userLoginResp = CopyUtil.copy(userDB, UserLoginResp.class);
+                return userLoginResp;
+            }else {
+                // 密码不对
+                LOG.info("密码不对, 输入密码：{}, 数据库密码：{}", req.getPassword(), userDB.getPassword())
+                throw new BusinessException(BusinessExceptionCode.LOGIN_USER_ERROR);
+            }
+        }
+
     }
 }

@@ -1,9 +1,11 @@
 package com.iiisunny.wiki.controller;
 
 import com.iiisunny.wiki.common.CommonRes;
+import com.iiisunny.wiki.req.UserLoginReq;
 import com.iiisunny.wiki.req.UserQueryReq;
 import com.iiisunny.wiki.req.UserResetPasswordReq;
 import com.iiisunny.wiki.req.UserSaveReq;
+import com.iiisunny.wiki.resp.UserLoginResp;
 import com.iiisunny.wiki.resp.UserQueryResp;
 import com.iiisunny.wiki.resp.PageResp;
 import com.iiisunny.wiki.service.UserService;
@@ -55,6 +57,15 @@ public class UserController {
         req.setPassword(DigestUtils.md5DigestAsHex(req.getPassword().getBytes()));
         CommonRes resp = new CommonRes<>();
         userService.resetPassword(req);
+        return resp;
+    }
+
+    @RequestMapping(value = "login", method = RequestMethod.POST)
+    public CommonRes login(@Valid @RequestBody UserLoginReq req) {
+        req.setPassword(DigestUtils.md5DigestAsHex(req.getPassword().getBytes()));
+        CommonRes<UserLoginResp> resp = new CommonRes<>();
+        UserLoginResp userLoginResp = userService.login(req);
+        resp.setContent(userLoginResp);
         return resp;
     }
 }

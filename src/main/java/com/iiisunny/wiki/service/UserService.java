@@ -1,9 +1,11 @@
 package com.iiisunny.wiki.service;
 
 import com.iiisunny.wiki.model.UserModel;
+import com.iiisunny.wiki.req.UserLoginReq;
 import com.iiisunny.wiki.req.UserQueryReq;
 import com.iiisunny.wiki.req.UserResetPasswordReq;
 import com.iiisunny.wiki.req.UserSaveReq;
+import com.iiisunny.wiki.resp.UserLoginResp;
 import com.iiisunny.wiki.resp.UserQueryResp;
 import com.iiisunny.wiki.resp.PageResp;
 
@@ -27,6 +29,10 @@ public interface UserService {
     // 删除用户
     void delete(Long id);
 
+    // 根据用户名查询用户
     UserModel selectByLoginName(String loginName);
+
+    // 登录
+    UserLoginResp login(UserLoginReq req);
 
 }
