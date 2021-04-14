@@ -1,5 +1,6 @@
 package com.iiisunny.wiki.controller;
 
+import com.alibaba.fastjson.JSONObject;
 import com.iiisunny.wiki.common.CommonRes;
 import com.iiisunny.wiki.req.UserLoginReq;
 import com.iiisunny.wiki.req.UserQueryReq;
@@ -9,11 +10,17 @@ import com.iiisunny.wiki.resp.UserLoginResp;
 import com.iiisunny.wiki.resp.UserQueryResp;
 import com.iiisunny.wiki.resp.PageResp;
 import com.iiisunny.wiki.service.UserService;
+import com.iiisunny.wiki.service.impl.UserServiceImpl;
+import com.iiisunny.wiki.util.SnowFlake;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.util.DigestUtils;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.concurrent.TimeUnit;
 
 
 /**
@@ -26,8 +33,16 @@ import javax.validation.Valid;
 @RequestMapping("/user")
 public class UserController {
 
+    private static final Logger LOG = LoggerFactory.getLogger(UserServiceImpl.class);
+
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private SnowFlake snowFlake;
+
+    @Autowired
+    private RedisTemplate redisTemplate;
 
     @RequestMapping(value = "/list", method = RequestMethod.GET)
     public CommonRes list(@Valid UserQueryReq req){
@@ -65,7 +80,22 @@ public class UserController {
         req.setPassword(DigestUtils.md5DigestAsHex(req.getPassword().getBytes()));
         CommonRes<UserLoginResp> resp = new CommonRes<>();
         UserLoginResp userLoginResp = userService.login(req);
+
+        Long token = snowFlake.nextId();
+        LOG.info("生成单点登录token，{}，并放入redis中", token);
+
+        userLoginResp.setToken(token.toString());
+        redisTemplate.opsForValue().set(token, JSONObject.toJSONString(userLoginResp), 3600*24, TimeUnit.SECONDS);
+
         resp.setContent(userLoginResp);
+        return resp;
+    }
+
+    @RequestMapping(value = "/logout/{token}", method = RequestMethod.GET)
+    public CommonRes logout(@PathVariable String token) {
+        CommonRes resp = new CommonRes<>();
+        redisTemplate.delete(token);
+        LOG.info("从redis中删除token：{}", token);
         return resp;
     }
 }
