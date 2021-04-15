@@ -27,4 +27,13 @@ public interface DocModelMapper {
     int updateByPrimaryKeySelective(DocModel record);
 
     int updateByPrimaryKey(DocModel record);
+
+    // 阅读数+1
+    void increaseViewCount(@Param("id") Long id);
+
+    // 点赞数=1
+    void increaseVoteCount(@Param("id") Long id);
+
+    // 定时更新用户信息
+    void updateEbookInfo();
 }

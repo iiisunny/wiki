@@ -33,4 +33,10 @@ public interface DocService {
     // 查询内容
     String findContent(Long id);
 
+    // 点赞功能
+    void vote(Long id);
+
+    // 定时更新电子书信息
+    void updateEbookInfo();
+
 }

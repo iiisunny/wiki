@@ -2,6 +2,8 @@ package com.iiisunny.wiki.service.impl;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.iiisunny.wiki.exception.BusinessException;
+import com.iiisunny.wiki.exception.BusinessExceptionCode;
 import com.iiisunny.wiki.mapper.ContentModelMapper;
 import com.iiisunny.wiki.mapper.DocModelMapper;
 import com.iiisunny.wiki.model.ContentModel;
@@ -13,6 +15,8 @@ import com.iiisunny.wiki.resp.DocQueryResp;
 import com.iiisunny.wiki.resp.PageResp;
 import com.iiisunny.wiki.service.DocService;
 import com.iiisunny.wiki.util.CopyUtil;
+import com.iiisunny.wiki.util.RedisUtil;
+import com.iiisunny.wiki.util.RequestContext;
 import com.iiisunny.wiki.util.SnowFlake;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -41,6 +45,9 @@ public class DocServiceImpl implements DocService {
 
     @Autowired
     private SnowFlake snowFlake;
+
+    @Autowired
+    private RedisUtil redisUtil;
 
     @Override
     public PageResp<DocQueryResp> list(DocQueryReq req) {
@@ -86,6 +93,8 @@ public class DocServiceImpl implements DocService {
         if (ObjectUtils.isEmpty(req.getId())){
             // 新增
             docModel.setId(snowFlake.nextId());
+            docModel.setViewCount(0);
+            docModel.setVoteCount(0);
             docModelMapper.insert(docModel);
 
             contentModel.setId(docModel.getId());
@@ -116,10 +125,30 @@ public class DocServiceImpl implements DocService {
     @Override
     public String findContent(Long id) {
         ContentModel contentModel = contentModelMapper.selectByPrimaryKey(id);
+
+        // 文档阅读数+1
+        docModelMapper.increaseViewCount(id);
         if (ObjectUtils.isEmpty(contentModel)){
             return "";
         }else {
             return contentModel.getContent();
         }
+    }
+
+    @Override
+    public void vote(Long id) {
+
+        // 远程IP+doc.id作为key，24小时不能重复
+        String ip = RequestContext.getRemoteAddr();
+        if (redisUtil.validateRepeat("DOC_VOTE_" + id + "_" + ip, 3600 * 24)){
+            docModelMapper.increaseVoteCount(id);
+        }else {
+            throw new BusinessException(BusinessExceptionCode.VOTE_REPEAT);
+        }
+    }
+
+    @Override
+    public void updateEbookInfo() {
+        docModelMapper.updateEbookInfo();
     }
 }
