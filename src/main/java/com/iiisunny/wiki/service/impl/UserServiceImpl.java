@@ -129,7 +129,7 @@ public class UserServiceImpl implements UserService {
                 return userLoginResp;
             }else {
                 // 密码不对
-                LOG.info("密码不对, 输入密码：{}, 数据库密码：{}", req.getPassword(), userDB.getPassword())
+                LOG.info("密码不对, 输入密码：{}, 数据库密码：{}", req.getPassword(), userDB.getPassword());
                 throw new BusinessException(BusinessExceptionCode.LOGIN_USER_ERROR);
             }
         }
