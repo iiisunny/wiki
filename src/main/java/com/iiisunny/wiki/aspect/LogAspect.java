@@ -14,6 +14,7 @@ import org.aspectj.lang.annotation.Pointcut;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.slf4j.MDC;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
@@ -34,13 +35,13 @@ public class LogAspect {
     @Pointcut("execution(public * com.iiisunny.*.controller..*Controller.*(..))")
     public void controllerPointcut() {}
 
-    @Resource
+    @Autowired
     private SnowFlake snowFlake;
 
     @Before("controllerPointcut()")
     public void doBefore(JoinPoint joinPoint) throws Throwable {
 
-        // 增加日志流水号
+        // 增加日志流水号(跟踪)
         MDC.put("LOG_ID", String.valueOf(snowFlake.nextId()));
 
         // 开始打印请求日志

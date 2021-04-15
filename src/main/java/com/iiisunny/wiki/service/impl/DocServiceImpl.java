@@ -14,14 +14,20 @@ import com.iiisunny.wiki.req.DocSaveReq;
 import com.iiisunny.wiki.resp.DocQueryResp;
 import com.iiisunny.wiki.resp.PageResp;
 import com.iiisunny.wiki.service.DocService;
+import com.iiisunny.wiki.service.WsService;
 import com.iiisunny.wiki.util.CopyUtil;
 import com.iiisunny.wiki.util.RedisUtil;
 import com.iiisunny.wiki.util.RequestContext;
 import com.iiisunny.wiki.util.SnowFlake;
+import com.iiisunny.wiki.websocket.WebSocketServer;
+import org.apache.rocketmq.spring.core.RocketMQTemplate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.slf4j.MDC;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.ObjectUtils;
 
 import java.util.List;
@@ -48,6 +54,12 @@ public class DocServiceImpl implements DocService {
 
     @Autowired
     private RedisUtil redisUtil;
+
+    @Autowired
+    private WsService wsService;
+
+    @Autowired
+    private RocketMQTemplate rocketMQTemplate;
 
     @Override
     public PageResp<DocQueryResp> list(DocQueryReq req) {
@@ -85,6 +97,7 @@ public class DocServiceImpl implements DocService {
     }
 
     @Override
+    @Transactional
     public void save(DocSaveReq req) {
 
         // 将请求参数变为实体
@@ -145,6 +158,12 @@ public class DocServiceImpl implements DocService {
         }else {
             throw new BusinessException(BusinessExceptionCode.VOTE_REPEAT);
         }
+
+        // 推送消息
+        DocModel docDB = docModelMapper.selectByPrimaryKey(id);
+        String logId = MDC.get("LOG_ID");
+        wsService.sendInfo("【" + docDB.getName() + "】被点赞！", logId);
+//        rocketMQTemplate.convertAndSend("VOTE_TOPIC", "【" + docDB.getName() + "】被点赞！");
     }
 
     @Override
