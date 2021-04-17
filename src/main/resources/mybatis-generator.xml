@@ -42,7 +42,7 @@
 <!--            &lt;!&ndash;<generatedKey column="id" sqlStatement="MySql" identity="true" />&ndash;&gt;-->
 <!--        </table>-->
 
-        <table tableName="user"  domainObjectName="UserModel" enableCountByExample="true"
+        <table tableName="ebook_snapshot"  domainObjectName="ebookSnapshotModel" enableCountByExample="true"
                enableUpdateByExample="true" enableDeleteByExample="true"
                enableSelectByExample="true" selectByExampleQueryId="true">
             <!--<generatedKey column="id" sqlStatement="MySql" identity="true" />-->

@@ -8,6 +8,7 @@ import * as Icons from '@ant-design/icons-vue';
 import axios from 'axios';
 import {Tool} from "@/util/tool";
 
+axios.defaults.baseURL = process.env.VUE_APP_SERVER;
 
 /**
  * axios拦截器 开始

@@ -1,24 +1,23 @@
 package com.iiisunny.wiki.job;
 
-import com.jiawa.wiki.service.EbookSnapshotService;
-import com.jiawa.wiki.util.SnowFlake;
+import com.iiisunny.wiki.service.EbookSnapshotService;
+import com.iiisunny.wiki.util.SnowFlake;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.slf4j.MDC;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
-
-import javax.annotation.Resource;
 
 @Component
 public class EbookSnapshotJob {
 
     private static final Logger LOG = LoggerFactory.getLogger(EbookSnapshotJob.class);
 
-    @Resource
+    @Autowired
     private EbookSnapshotService ebookSnapshotService;
 
-    @Resource
+    @Autowired
     private SnowFlake snowFlake;
 
     /**

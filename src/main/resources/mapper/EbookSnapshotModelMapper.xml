@@ -1,0 +1,311 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.iiisunny.wiki.mapper.EbookSnapshotModelMapper">
+  <resultMap id="BaseResultMap" type="com.iiisunny.wiki.model.ebookSnapshotModel">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="ebook_id" jdbcType="BIGINT" property="ebookId" />
+    <result column="date" jdbcType="DATE" property="date" />
+    <result column="view_count" jdbcType="INTEGER" property="viewCount" />
+    <result column="vote_count" jdbcType="INTEGER" property="voteCount" />
+    <result column="view_increase" jdbcType="INTEGER" property="viewIncrease" />
+    <result column="vote_increase" jdbcType="INTEGER" property="voteIncrease" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    id, ebook_id, `date`, view_count, vote_count, view_increase, vote_increase
+  </sql>
+  <select id="selectByExample" parameterType="com.iiisunny.wiki.model.ebookSnapshotModelExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    'true' as QUERYID,
+    <include refid="Base_Column_List" />
+    from ebook_snapshot
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from ebook_snapshot
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from ebook_snapshot
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.iiisunny.wiki.model.ebookSnapshotModelExample">
+    delete from ebook_snapshot
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.iiisunny.wiki.model.ebookSnapshotModel">
+    insert into ebook_snapshot (id, ebook_id, `date`, 
+      view_count, vote_count, view_increase, 
+      vote_increase)
+    values (#{id,jdbcType=BIGINT}, #{ebookId,jdbcType=BIGINT}, #{date,jdbcType=DATE}, 
+      #{viewCount,jdbcType=INTEGER}, #{voteCount,jdbcType=INTEGER}, #{viewIncrease,jdbcType=INTEGER}, 
+      #{voteIncrease,jdbcType=INTEGER})
+  </insert>
+  <insert id="insertSelective" parameterType="com.iiisunny.wiki.model.ebookSnapshotModel">
+    insert into ebook_snapshot
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="ebookId != null">
+        ebook_id,
+      </if>
+      <if test="date != null">
+        `date`,
+      </if>
+      <if test="viewCount != null">
+        view_count,
+      </if>
+      <if test="voteCount != null">
+        vote_count,
+      </if>
+      <if test="viewIncrease != null">
+        view_increase,
+      </if>
+      <if test="voteIncrease != null">
+        vote_increase,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="ebookId != null">
+        #{ebookId,jdbcType=BIGINT},
+      </if>
+      <if test="date != null">
+        #{date,jdbcType=DATE},
+      </if>
+      <if test="viewCount != null">
+        #{viewCount,jdbcType=INTEGER},
+      </if>
+      <if test="voteCount != null">
+        #{voteCount,jdbcType=INTEGER},
+      </if>
+      <if test="viewIncrease != null">
+        #{viewIncrease,jdbcType=INTEGER},
+      </if>
+      <if test="voteIncrease != null">
+        #{voteIncrease,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.iiisunny.wiki.model.ebookSnapshotModelExample" resultType="java.lang.Long">
+    select count(*) from ebook_snapshot
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update ebook_snapshot
+    <set>
+      <if test="record.id != null">
+        id = #{record.id,jdbcType=BIGINT},
+      </if>
+      <if test="record.ebookId != null">
+        ebook_id = #{record.ebookId,jdbcType=BIGINT},
+      </if>
+      <if test="record.date != null">
+        `date` = #{record.date,jdbcType=DATE},
+      </if>
+      <if test="record.viewCount != null">
+        view_count = #{record.viewCount,jdbcType=INTEGER},
+      </if>
+      <if test="record.voteCount != null">
+        vote_count = #{record.voteCount,jdbcType=INTEGER},
+      </if>
+      <if test="record.viewIncrease != null">
+        view_increase = #{record.viewIncrease,jdbcType=INTEGER},
+      </if>
+      <if test="record.voteIncrease != null">
+        vote_increase = #{record.voteIncrease,jdbcType=INTEGER},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update ebook_snapshot
+    set id = #{record.id,jdbcType=BIGINT},
+      ebook_id = #{record.ebookId,jdbcType=BIGINT},
+      `date` = #{record.date,jdbcType=DATE},
+      view_count = #{record.viewCount,jdbcType=INTEGER},
+      vote_count = #{record.voteCount,jdbcType=INTEGER},
+      view_increase = #{record.viewIncrease,jdbcType=INTEGER},
+      vote_increase = #{record.voteIncrease,jdbcType=INTEGER}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.iiisunny.wiki.model.ebookSnapshotModel">
+    update ebook_snapshot
+    <set>
+      <if test="ebookId != null">
+        ebook_id = #{ebookId,jdbcType=BIGINT},
+      </if>
+      <if test="date != null">
+        `date` = #{date,jdbcType=DATE},
+      </if>
+      <if test="viewCount != null">
+        view_count = #{viewCount,jdbcType=INTEGER},
+      </if>
+      <if test="voteCount != null">
+        vote_count = #{voteCount,jdbcType=INTEGER},
+      </if>
+      <if test="viewIncrease != null">
+        view_increase = #{viewIncrease,jdbcType=INTEGER},
+      </if>
+      <if test="voteIncrease != null">
+        vote_increase = #{voteIncrease,jdbcType=INTEGER},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.iiisunny.wiki.model.ebookSnapshotModel">
+    update ebook_snapshot
+    set ebook_id = #{ebookId,jdbcType=BIGINT},
+      `date` = #{date,jdbcType=DATE},
+      view_count = #{viewCount,jdbcType=INTEGER},
+      vote_count = #{voteCount,jdbcType=INTEGER},
+      view_increase = #{viewIncrease,jdbcType=INTEGER},
+      vote_increase = #{voteIncrease,jdbcType=INTEGER}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <!--
+    # 方案一（ID不连续）：
+    #   删除今天的数据
+    #   为所有的电子书生成一条今天的记录
+    #   更新总阅读数、总点赞数
+    #   更新今日阅读数、今日点赞数
+    # 方案二（ID连续）：
+    #   为所有的电子书生成一条今天的记录，如果还没有
+    #   更新总阅读数、总点赞数
+    #   更新今日阅读数、今日点赞数
+    -->
+  <update id="genSnapshot">
+        insert into ebook_snapshot(ebook_id, `date`, view_count, vote_count, view_increase, vote_increase)
+        select t1.id, curdate(), 0, 0, 0, 0
+        from ebook t1
+        where not exists(select 1
+                         from ebook_snapshot t2
+                         where t1.id = t2.ebook_id
+                           and t2.`date` = curdate());
+
+        update ebook_snapshot t1, ebook t2
+        set t1.view_count = t2.view_count,
+            t1.vote_count = t2.vote_count
+        where t1.`date` = curdate()
+          and t1.ebook_id = t2.id;
+
+        update ebook_snapshot t1 left join (select ebook_id, view_count, vote_count
+                                            from ebook_snapshot
+                                            where `date` = date_sub(curdate(), interval 1 day)) t2
+            on t1.ebook_id = t2.ebook_id
+        set t1.view_increase = (t1.view_count - ifnull(t2.view_count, 0)),
+            t1.vote_increase = (t1.vote_count - ifnull(t2.vote_count, 0))
+        where t1.`date` = curdate();
+    </update>
+
+  <!-- 获取首页数值数据：总阅读数、总点赞数、今日阅读数、今日点赞数、今日预计阅读数、今日预计阅读增长 -->
+  <select id="getStatistic" resultType="com.iiisunny.wiki.resp.StatisticResp">
+        select
+            t1.`date` as `date`,
+            sum(t1.view_count) as viewCount,
+            sum(t1.vote_count) as voteCount,
+            sum(t1.view_increase) as viewIncrease,
+            sum(t1.vote_increase) as voteIncrease
+        from
+            ebook_snapshot t1
+        where
+            t1.`date` >= date_sub(curdate(), interval 1 day)
+        group by
+            t1.`date`
+        order by
+            t1.`date` asc;
+    </select>
+
+  <select id="get30Statistic" resultType="com.iiisunny.wiki.resp.StatisticResp">
+        select
+            t1.`date` as `date`,
+            sum(t1.view_increase) as viewIncrease,
+            sum(t1.vote_increase) as voteIncrease
+        from
+            ebook_snapshot t1
+        where
+            t1.`date` between date_sub(curdate(), interval 30 day) and date_sub(curdate(), interval 1 day)
+        group by
+            t1.`date`
+        order by
+            t1.`date` asc;
+    </select>
+</mapper>
