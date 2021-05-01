@@ -1,11 +1,12 @@
 <template>
   <a-layout>
-    <a-layout-sider width="200" style="background: #fff">
+    <a-layout-sider width="200" style="background: #ffffff">
       <a-menu
           mode="inline"
           :style="{ height: '100%', borderRight: 0 }"
           @click="handleClick"
           :openKeys="openKeys"
+          style="background: #f3f5f5"
       >
         <a-menu-item key="welcome">
           <MailOutlined />
@@ -25,8 +26,18 @@
       </a-menu>
     </a-layout-sider>
     <a-layout-content
-        :style="{ background: '#fff', padding: '24px', margin: 0, minHeight: '280px' }"
+        :style="{ background: '#f3f5f5', padding: '24px', margin: 0, minHeight: '280px' }"
     >
+      <div>
+        <a-input-search
+            v-model:value="searchEbookName"
+            placeholder="请输入您要搜索的内容"
+            enter-button
+            @search="onSearch"
+        />
+      </div>
+      <br />
+      <br />
       <div class="welcome" v-show="isShowWelcome">
         <the-welcome></the-welcome>
       </div>
@@ -63,7 +74,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, onMounted, ref, reactive, toRef } from 'vue';
+import { defineComponent, onMounted, ref } from 'vue';
 import axios from 'axios';
 import { message } from 'ant-design-vue';
 import {Tool} from "@/util/tool";
@@ -149,6 +160,27 @@ export default defineComponent({
       // isShowWelcome.value = value.key === 'welcome';
     };
 
+    /**
+     * 查询内容
+     * @param searchValue
+     */
+    const searchEbookName = ref<string>('');
+
+    const onSearch = (searchValue: string) => {
+      console.log('搜索内容是：', searchValue);
+      axios.get("/ebook/list", {
+        params: {
+          page: 1,
+          size: 1000,
+          name: searchValue
+        }
+      }).then((response) => {
+        const data = response.data;
+        ebooks.value = data.content.list;
+        isShowWelcome.value = false;
+      });
+    };
+
     onMounted(() => {
       handleQueryCategory();
       // handleQueryEbook();
@@ -175,7 +207,11 @@ export default defineComponent({
 
       isShowWelcome,
 
-      openKeys
+      openKeys,
+
+      searchEbookName,
+      onSearch,
+
     }
   }
 });
