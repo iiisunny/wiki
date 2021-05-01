@@ -40,7 +40,7 @@ public class ActionInterceptor implements HandlerInterceptor {
         response.setStatus(HttpStatus.OK.value());
         CommonRes commonResp = new CommonRes();
         commonResp.setSuccess(false);
-        commonResp.setMessage("哈哈，操作被拦截了，你就当操作成功了！示例网站暂不开放增删改操作");
+        commonResp.setMessage("哈哈，操作被拦截了，普通账号暂不开放增删改操作,请使用管理账号：admin admin");
         response.setContentType("application/json;charset=UTF-8");
         response.setCharacterEncoding("UTF-8");
         response.getWriter().print(JSONObject.toJSON(commonResp));
