@@ -22,7 +22,7 @@ public class DocJob {
     private SnowFlake snowFlake;
 
     /**
-     * 每30秒更新电子书信息
+     * 每10分钟更新电子书信息
      */
     @Scheduled(cron = "0 0/10 * * * ?")
     public void cron() {

@@ -31,7 +31,7 @@
       <div>
         <a-input-search
             v-model:value="searchEbookName"
-            placeholder="请输入您要搜索的内容"
+            placeholder="请输入您要搜索的内容，不输入内容点击搜索将会展示所有内容"
             enter-button
             @search="onSearch"
         />
