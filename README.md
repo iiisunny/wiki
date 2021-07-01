@@ -36,3 +36,4 @@
 
 - 搜索服务  - ES
 - 拓展其他测试平台
+- vue 组件升级： Element Plus 
